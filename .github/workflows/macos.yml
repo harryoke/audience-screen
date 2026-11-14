@@ -1,0 +1,26 @@
+name: Build macOS app
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test, build universal app, and smoke test
+        run: bash scripts/build-macos.sh
+      - name: Upload ready-to-open macOS app
+        uses: actions/upload-artifact@v4
+        with:
+          name: Audience-Screen-macOS-Universal
+          path: |
+            dist/Audience-Screen-macOS-Universal.zip
+            dist/SHA256SUMS.txt
+            dist/smoke-test.log
+          if-no-files-found: error
+          retention-days: 90
