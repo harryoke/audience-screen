@@ -14,7 +14,7 @@ cp packaging/Info.plist "$APP/Contents/Info.plist"
 swift scripts/make-icon.swift "$APP/Contents/Resources/AppIcon.icns"
 codesign --force --deep --sign - "$APP"
 codesign --verify --deep --strict "$APP"
-lipo -verify_arch arm64 x86_64 "$APP/Contents/MacOS/AudienceScreen"
+lipo "$APP/Contents/MacOS/AudienceScreen" -verify_arch arm64 x86_64
 "$APP/Contents/MacOS/AudienceScreen" --smoke-test | tee dist/smoke-test.log
 grep -q AUDIENCE_SCREEN_SMOKE_OK dist/smoke-test.log
 ditto -c -k --sequesterRsrc --keepParent "$APP" dist/Audience-Screen-macOS-Universal.zip
